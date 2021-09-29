@@ -47,19 +47,19 @@ class Api {
     required String countryName,
     required String leagueName,
   }) async {
-    CountryLeague countryLeague;
+    CountryLeague? countryLeague;
     var response = await _client
         .get(Uri.parse(Url.searchFilterLeague + "$countryName&s=$leagueName"));
     print(response.body);
-    try {
-      if (response.statusCode == 200) {
-        Map<String, dynamic> userMap = jsonDecode(response.body);
-        countryLeague = CountryLeague.fromJson(userMap);
-        return countryLeague.countrys!;
-      }
-    } catch (e) {
-      throw e;
+    // try {
+    if (response.statusCode == 200) {
+      Map<String, dynamic> userMap = jsonDecode(response.body);
+      countryLeague = CountryLeague.fromJson(userMap);
+      if (countryLeague.countrys != null) return countryLeague.countrys!;
     }
+    // } catch (e) {
+    //   throw e;
+    // }
     return [];
   }
 }

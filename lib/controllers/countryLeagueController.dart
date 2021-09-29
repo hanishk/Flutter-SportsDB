@@ -6,10 +6,11 @@ import 'package:sports_db/models/countryLeague.dart';
 class CountryLeagueController extends GetxController {
   var leagueList = <Country>[].obs;
   var allSportsList = <Sport>[].obs;
-  var searchedList = <Country>[].obs;
   RxBool isLoading = true.obs;
+  var tempList = <Country>[];
+  var query = ''.obs;
 
-  void getLeagueList({required String countryName}) async {
+  Future getLeagueList({required String countryName}) async {
     try {
       isLoading(true);
       var response = await Api.getLeagues(countryName: countryName);
@@ -56,19 +57,16 @@ class CountryLeagueController extends GetxController {
 
   Future searchedLeague(
       {required String countryName, required String league}) async {
-    try {
-      isLoading(true);
-      var searchedLeague = await Api.getFilterLeague(
-        countryName: countryName,
-        leagueName: league,
-      );
-      if (searchedLeague.length != null) {
-        searchedList.assignAll(searchedLeague);
-      }
-    } catch (e) {
-      throw e;
-    } finally {
-      isLoading(false);
+    isLoading(true);
+    var searchedLeague = await Api.getFilterLeague(
+      countryName: countryName,
+      leagueName: league,
+    );
+    if (searchedLeague.isNotEmpty) {
+      leagueList.assignAll(searchedLeague);
+    } else {
+      leagueList.assignAll(tempList);
     }
+    isLoading(false);
   }
 }

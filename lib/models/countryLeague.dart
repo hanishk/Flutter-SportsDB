@@ -14,11 +14,13 @@ class CountryLeague {
     this.countrys,
   });
 
-  List<Country>? countrys;
+  List<Country>? countrys = [];
 
   factory CountryLeague.fromJson(Map<String, dynamic> json) => CountryLeague(
-        countrys: List<Country>.from(
-            json["countrys"].map((x) => Country.fromJson(x))),
+        countrys: json["countrys"] != null
+            ? List<Country>.from(
+                json["countrys"]!.map((x) => Country.fromJson(x)))
+            : null,
       );
 
   Map<String, dynamic> toJson() => {

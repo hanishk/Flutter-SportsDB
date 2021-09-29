@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sports_db/config/colors.dart';
 import 'package:sports_db/controllers/countryLeagueController.dart';
-import 'package:sports_db/models/countryLeague.dart';
 import 'package:sports_db/views/league/leagueTile.dart';
 import 'package:sports_db/widgets/appbar.dart';
-import 'package:sports_db/widgets/search_widget.dart';
+import 'package:sports_db/widgets/styles.dart';
 
 class LeagueScreen extends StatefulWidget {
   final String countryName;
@@ -16,43 +16,39 @@ class LeagueScreen extends StatefulWidget {
 
 class _LeagueScreenState extends State<LeagueScreen> {
   final countryLeagueController = Get.put(CountryLeagueController());
-  String query = '';
-  // late List<Country> league;
 
   @override
   void initState() {
     countryLeagueController.getLeagueList(countryName: widget.countryName);
-    // countryLeagueController.searchedList = countryLeagueController.leagueList;
+    countryLeagueController.query.value = '';
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget buildSearch() => SearchWidget(
-          text: query,
-          hintText: "Search leagues...",
-          onChanged: searchLeague,
-        );
     return Scaffold(
       // mainAppBar is common App bar for all of Screens
       appBar: mainAppBar(context, title: widget.countryName),
-      body:
-          // Column(
-          //   mainAxisSize: MainAxisSize.min,
-          //   children: [
-          // Padding(
-          //   padding:
-          //       const EdgeInsets.symmetric(horizontal: 15.0, vertical: 14.0),
-          //   child: TextFormField(
-          //     cursorColor: redPrimary,
-          //     decoration:
-          //         TfDecoration.inputDecoration(textHint: 'Search leagues...'),
-          //   ),
-          // ),
-          // listView builder to fetch list of league
-          Column(
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          buildSearch(),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 14.0),
+            child: TextField(
+              onChanged: (query) async {
+                if (query.length != 0)
+                  await countryLeagueController.searchedLeague(
+                      countryName: widget.countryName, league: query);
+                else
+                  await countryLeagueController.getLeagueList(
+                      countryName: widget.countryName);
+              },
+              cursorColor: redPrimary,
+              decoration:
+                  TfDecoration.inputDecoration(textHint: 'Search leagues...'),
+            ),
+          ),
           Expanded(
             child: Obx(
               () {
@@ -79,12 +75,5 @@ class _LeagueScreenState extends State<LeagueScreen> {
         ],
       ),
     );
-  }
-
-  void searchLeague(String query) {
-    final leagues = countryLeagueController.searchedList;
-    setState(() {
-      countryLeagueController.leagueList = leagues;
-    });
   }
 }
