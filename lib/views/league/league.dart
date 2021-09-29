@@ -20,7 +20,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
   @override
   void initState() {
     countryLeagueController.getLeagueList(countryName: widget.countryName);
-    countryLeagueController.query.value = '';
+    // countryLeagueController.query.value = '';
     super.initState();
   }
 

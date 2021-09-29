@@ -16,8 +16,6 @@ class LeagueTile extends StatefulWidget {
 }
 
 class _LeagueTileState extends State<LeagueTile> {
-  // final CountryLeagueController countryLeagueController = Get.find();
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -33,12 +31,17 @@ class _LeagueTileState extends State<LeagueTile> {
           Positioned(
             left: 12,
             top: 10,
-            child: Text(
-              widget.countryLeageModel.strLeague!,
-              style: TextStyle(
-                color: headlineColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
+            child: Container(
+              width: 300,
+              child: Text(
+                widget.countryLeageModel.strLeague!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: headlineColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
             ),
           ),

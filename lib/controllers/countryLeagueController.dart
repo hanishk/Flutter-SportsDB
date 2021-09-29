@@ -8,7 +8,7 @@ class CountryLeagueController extends GetxController {
   var allSportsList = <Sport>[].obs;
   RxBool isLoading = true.obs;
   var tempList = <Country>[];
-  var query = ''.obs;
+  // var query = ''.obs;
 
   Future getLeagueList({required String countryName}) async {
     try {
